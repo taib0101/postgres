@@ -1,0 +1,246 @@
+
+Table and Schema Management
+1. Creating Tables: CREATE TABLE.
+Create :
+	$ CREATE TABLE employee1 (
+		id INT PRIMARY KEY,
+		firstname VARCHAR(30) NOT NULL,
+		lastname VARCHAR(30) NOT NULL,
+		salary1 INT, CHECK (salary1 >= 10000)
+	    ); // employee1 is table
+
+	insert:
+	   	$ INSERT INTO employee1 ( id, firstname, lastname, salary1 )
+		  VALUES ( 1, 'reza', 'mustafa', 10000 ),
+			( 2, 'murtaza', 'taib', 15000 ),
+			( 3, 'tahzin', 'abser', 10000 ),
+			( 4, 'ashiq', 'elahi', 20000 ),
+			( 5, 'sheikh', 'sadi', 25000 ),
+			( 6, 'suleman', 'ifty', 30000 ),
+			( 7, 'fahim', 'mahtab', 20000 );
+
+2. Modifying Tables: 
+		$ ALTER TABLE (add, remove, or modify columns).
+
+* add column : 
+	$ ALTER TABLE employee1 add blood varchar(5); 
+		// employee1 is table and 
+		// blood is column
+	
+	update: 
+		$ update employee1 set blood='C+', firstname='rahat' 
+			WHERE firstname='reza'; 
+			// employee1 is table
+			// blood, firstname is column
+
+
+* remove column : 
+	$ ALTER TABLE employee1 DROP COLUMN blood;
+			// employee1 is table
+
+* modify column: i skiped it , will see later.
+
+3. Dropping Tables: 
+	$ DROP TABLE employee1; // employee1 is table
+
+
+Filtering and Sorting
+1. Filtering Data: WHERE, BETWEEN, IN, LIKE.
+	* WHERE : 
+	      $ SELECT * FROM employee1 WHERE salary1 = 10000;
+
+		  $ SELECT firstname, lastname FROM employee1 
+		  WHERE salary1 = 10000;
+		  
+		  $ select salary1 from employee1 where salary1 * 2 = 20000;
+
+		  $ select salary1 from employee1 where salary1 * 2 != 20000;
+
+		  $ select salary1 from employee1 where salary1 >= 10000 AND salary1 <= 20000;
+
+		  // employee1 is table.
+		  // firstname, lastame, salary1 are column
+		
+		In: $ SELECT firstname FROM employee1 WHERE 
+		    firstname in('suleman', 'sheikh');
+		    // employee1 is table
+		    // firstname is column
+		    // it is same as OR
+			// when youi wanna get more then one,
+			// row in same column use IN
+
+		NOT IN : 
+	
+		Or: $ SELECT firstname FROM employee1 WHERE 
+		    firstname='sheikh' OR firstname='suleman';
+		    // employee1 is table
+		    // firstname is column
+		    // sheikh and suleman are values
+
+		AND : 
+	
+	* BETWEEN : $ SELECT id FROM employee1 WHERE id BETWEEN 1 AND 4;
+		    // employee1 is table, id is column.
+                    // 1 and 4 are values
+		   
+		    $ SELECT firstname FROM employee1 WHERE firstname 
+		    BETWEEN 'murtaza' AND 'rahat';
+		    // employee1 is table, firstname is column
+		    // 1 and 4 are values.
+		    // sheikh and suleman are values
+
+	* NOT Between : 
+
+	* LIKE : LIKE has two wildcards. they are "%" and "_"
+		 % represents zero, one or more character for query
+		 $ SELECT firstname FROM employee1 WHERE firstname 
+			LIKE 's%';
+
+		 _ underscore represent only one charachter
+		 $ SELECT firstname FROM employee1 WHERE firstname 
+			LIKE '_a%';		
+
+2. Sorting Data : ORDER BY (ascending/descending).
+	DESC : $ SELECT salary1 FROM employee1 ORDER BY salary1 DESC; // DESC for descendeing 
+		   $ SELECT salary1 FROM employee1 ORDER BY salary1 DESC LIMIT 4; 
+		   // will show only 4 for using LIMIT
+
+		   $ SELECT salary1, id FROM employee1 WHERE id <= 3 ORDER BY salary1 DESC;
+		   // using with WHERE clause
+
+		   // employee1 is table
+		   // salary1, id are columns
+
+		   $ SELECT firstname, lastname, salary1 
+		     FROM employee1 ORDER BY lastname, salary1 DESC;
+
+	ASC :  SELECT firstname, salary1 FROM employee1 WHERE id <= 3 ORDER BY salary1 ASC;
+
+3 . Filtering Data with math equation: 
+	select salary1 * 2 from employee1;
+
+Aggregate Functions
+	COUNT : $ SELECT COUNT(*) FROM employee1;
+		   $ SELECT COUNT(firstname) FROM employee1;
+		   // employee1 is table and firstname is column
+
+	SUM : $ SELECT SUM(salary1) FROM employee1;
+		  // employee1 is table, salary1 is column.
+	
+	AVG : $ SELECT AVG(salary1) FROM employee1;
+		  $ SELECT round(avg(salary1)) FROM employee1;
+		  // employee1 is table, salary1 is column.
+
+	MIN : $ SELECT MIN(salary1) FROM employee1;
+		  // employee1 is table, salary1 is column.
+
+	MAX : $ SELECT MAX(salary1) FROM employee1;
+
+	LENGTH: SELECT LENGTH(firstname), firstname FROM employee1;
+
+Common Functions
+1.String functions : (CONCAT, SUBSTRING).
+	CONCAT : $ SELECT firstname, lastname, 
+			   CONCAT(firstname, ' ', lastname) AS fullname FROM employee1 ;
+
+	SUBSTRING : $ SELECT SUBSTRING(firstname, 1, 4) FROM employee1; // SUBSTRING for column
+				$ SELECT firstname FROM employee1 WHERE 
+				  SUBSTRING(firstname, 1, 1) = 's'; // SUBSTRING for query
+
+				// employee1 is table.
+				// firstname is column 
+
+	INSTR : finding index number of 'a'; it work oracle dbms
+
+	POSITION :  finding index number of 'a'; it work postgresql dbms
+			$ SELECT POSITION('a' IN firstname) AS indexNumber 
+			  FROM employee1 WHERE firstname = 'rahat';
+
+	UPPER : 
+			$ SELECT UPPER(firstname) as upper FROM employee1;
+				// employee1 is table.
+				// firstname is column 
+
+	REPLACE : 
+			 $ SELECT REPLACE(firstname , 'a', 'A') FROM employee1;
+			 $ SELECT firstname, REPLACE(firstname, 'a', 'A') 
+			   FROM employee1 WHERE firstname='murtaza' GROUP BY firstname;
+
+2. Date functions : (NOW, DATEDIFF).
+	NOW : 
+	DATEDIFF : 
+
+Unique Values
+	DISTINCT : $ SELECT DISTINCT salary1 FROM employee1;
+			   // you can also see GROUP BY to see values
+
+Grouping Data 
+1. GROUP BY : what you SELECT, and write GROUP BY for SELECT
+
+			  $ SELECT salary1, COUNT(*) FROM employee1 GROUP BY salary1;
+			  $ SELECT salary1, COUNT(*) FROM employee1 WHERE firstname in('murtaza', 'rahat') 
+			    GROUP BY salary1; // you can apply Aggregate or some Common function for GROUP BY
+				// employee1 is table
+				// salary1, firstname are columns
+
+			  $ SELECT firstname, salary1 FROM employee1 GROUP BY firstname, salary1;
+
+	Filter Grouped data : filter grouped data using HAVING
+						  $ SELECT salary1, COUNT(*) FROM employee1 GROUP BY salary1 
+						    HAVING COUNT(*) > 1 ;
+						  // employee1 is table.
+						  // salary1 is columns.
+
+				WHERE vs HAVING: WHERE use for filtering wihtout grouped data.
+								 HAVING use for filtering GROUP data;
+
+Constraints
+	Primary Key: Ensures uniqueness.
+	Foreign Key: Links tables.
+	NOT NULL, UNIQUE, CHECK, DEFAULT.
+
+CREATE FOREIGN KEY : 
+	CREATE TABLE employee2 (
+		id INT,
+		firstname VARCHAR(20) NOT NULL,
+		salary2 INT, CHECK (salary2 >= 10000),
+		blood VARCHAR(5) NOT NULL,
+		FOREIGN KEY (id) REFERENCES employee1(id) );
+	
+	INSERT INTO employee2 (id, firstname, salary2, blood) 
+		VALUES (1, 'rahat', 10000, 'B+'),
+		(2, 'murtaza', 20000, 'B+'),
+		(2, 'murtaza', 15000, 'B+'),
+		(3, 'tahzin', 25000, 'A+'),
+		(3, 'tahzin', 20000, 'A+'),
+		(4, 'ashiq', 15000, 'A-'),
+		(4, 'ashiq', 10000, 'A-'),
+		(5, 'sheikh', 20000, 'O+'),
+		(5, 'sheikh', 25000, 'O+'),
+		(6, 'suleman', 30000, 'B+'),
+		(6, 'suleman', 25000, 'B+'),
+		(7, 'fahim', 20000, 'AB+'),
+		(7, 'fahim', 25000, 'AB+');
+
+Subqueries
+	WHERE : $ SELECT firstname FROM employee1 WHERE
+			salary1 IN (SELECT salary2 * 2 FROM employee2 WHERE salary2 = 10000);
+
+			$ SELECT firstname FROM employee1 WHERE salary1 = (SELECT salary2 FROM employee2 WHERE salary2 = 30000);
+	
+	SELECT : 
+
+JOIN
+
+	1. INNER JOIN : 
+					$ SELECT * FROM employee1 INNER JOIN employee2 ON employee1.id = employee2.id;
+
+					$ SELECT employee1.salary1 + employee2.salary2, employee1.id AS total FROM employee1 
+					  INNER JOIN employee2 ON employee1.id = employee2.id;
+
+	2. LEFT JOIN : 
+					$ SELECT * FROM employee1 LEFT JOIN employee2 ON employee1.id = employee2.id;
+
+	3. RIGHT JOIN : 
+					$ SELECT * FROM employee1 RIGHT JOIN employee2 ON employee1.id = employee2.id;
+
